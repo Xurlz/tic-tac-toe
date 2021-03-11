@@ -75,7 +75,7 @@ class Game extends React.Component {
       history: history.concat([{
         squares: squares,
         lastMove: {
-          coord: getSquareCoords(i)
+        coord: getSquareCoords(i)
         }
       }]),
       stepNumber: history.length,
