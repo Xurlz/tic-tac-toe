@@ -102,9 +102,11 @@ class Game extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
+    // `move` referencia indice do history
     const moves = history.map((step,move) => {
+      console.log({'move':move});
       const desc = move ?
-        `Go to move #${move}` :
+        `Go to move #${move} (row move.coord.row, col move.coord.col)` :
         `Go to game start`;
 
       return (
