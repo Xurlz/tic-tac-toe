@@ -104,10 +104,15 @@ class Game extends React.Component {
 
     // `move` referencia indice do history
     const moves = history.map((step,move) => {
-      console.log({'move':move});
-      const desc = move ?
-        `Go to move #${move} (row move.coord.row, col move.coord.col)` :
-        `Go to game start`;
+      let desc;
+
+      if (move) {
+        const row = history[move].coord.row;
+        const col = history[move].coord.col;
+        desc = `Go to move #${move} (row ${row},col ${col})`
+      } else {
+        desc = `Go to game start`
+      }
 
       return (
         <li key={move}>
