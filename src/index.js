@@ -74,10 +74,14 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares: squares,
+        lastMove: {
+          coord: getSquareCoords(i)
+        }
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
+    console.log(history)
   }
 
   jumpTo(step) {
