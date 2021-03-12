@@ -14,10 +14,29 @@ class Board extends React.Component {
     );
   }
 
+  // Pode ser refatorado. Código redundante.
+  renderHighLightedSquare(i) {
+    return (
+      <Square
+        // Considerar usar outro valor como key
+        key={i}
+        value={this.props.squares[i]}
+        color='yellow'
+        onClick={() => this.props.onClick(i)}
+      />
+    )
+  }
+
   render() {
+    const highlightedLine = this.props.highlightedLine;
     let squares = Array();
     for (let i = 0; i < 9; i++ ) {
-      squares.push(this.renderSquare(i));
+      // Refatorar essa parte
+      if(highlightedLine && i === highlightedLine[0] || i === highlightedLine[1] || i === highlightedLine[2]) {
+        squares.push(this.renderHighLightedSquare(i));
+      } else {
+        squares.push(this.renderSquare(i));
+      }
     }
     
     return (
@@ -42,6 +61,7 @@ class Square extends React.Component {
       <button
         className="square"
         onClick={() => { this.props.onClick() }}
+        color={this.props.color}
       >
         {this.props.value}
       </button>
@@ -59,7 +79,8 @@ class Game extends React.Component {
       boldSelectedStep: false,
       stepNumber: 0,
       xIsNext: true,
-      flipMoveList: false
+      flipMoveList: false,
+      highlightedLine: false,
     }
   }
 
@@ -105,6 +126,7 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    const winnerLine = calculateWinnerLine(current.squares);
     const boldSelectedStep = this.state.boldSelectedStep;
     const flipMoveList = this.state.flipMoveList;
 
@@ -151,6 +173,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
+            highlightedLine={winnerLine}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
@@ -172,7 +195,31 @@ ReactDOM.render(
 )
 
 function calculateWinner(squares) {
-  const lines = [
+  const lines = getLines()
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+
+function calculateWinnerLine(squares) {
+  const lines = getLines();
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return lines[i];
+    }
+  }
+  return false;
+}
+
+function getLines() {
+  return [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -182,13 +229,6 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
 }
 
 function getSquareCoords(squareIndex){
