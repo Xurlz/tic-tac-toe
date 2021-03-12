@@ -58,6 +58,7 @@ class Game extends React.Component {
       boldSelectedStep: false,
       stepNumber: 0,
       xIsNext: true,
+      flipMoveList: false
     }
   }
 
@@ -91,11 +92,21 @@ class Game extends React.Component {
     })
   }
 
+  sort() {
+    const flipMoveList = this.state.flipMoveList;
+
+    flipMoveList ?
+      this.setState({ flipMoveList: false}):
+      this.setState({flipMoveList: true});
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const boldSelectedStep = this.state.boldSelectedStep;
+    const flipMoveList = this.state.flipMoveList;
+
     let status;
     if(winner) {
       status = 'Winner: ' + winner;
@@ -144,7 +155,11 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{flipMoveList?moves.reverse():moves}</ol>
+          <button onClick={() => this.sort()}>Sort</button>
+        </div>
+        <div>
+
         </div>
       </div>
     );
