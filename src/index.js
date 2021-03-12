@@ -30,26 +30,30 @@ class Board extends React.Component {
   render() {
     const highlightedLine = this.props.highlightedLine;
     let squares = Array();
+    let rows = Array();
+    // Motivo para a complexidade da estrutura: Renderização depende do indice
     for (let i = 0; i < 9; i++ ) {
-      // Refatorar essa parte
-      if(highlightedLine && i === highlightedLine[0] || i === highlightedLine[1] || i === highlightedLine[2]) {
+      let isFromHighlighted = i === highlightedLine[0] || i === highlightedLine[1] || i === highlightedLine[2];
+      if(highlightedLine && isFromHighlighted) {
         squares.push(this.renderHighLightedSquare(i));
       } else {
         squares.push(this.renderSquare(i));
       }
+      if( squares.length % 3 === 0 ) {
+        rows.push(
+          <div
+            key={Math.floor(i/3)}
+            className="board-row">
+            {squares}
+          </div>
+        );
+        squares = Array();
+      }
     }
-    
+
     return (
       <div>
-        <div className="board-row">
-          {squares.slice(0,3)}
-        </div>
-        <div className="board-row">
-          {squares.slice(3,6)}
-        </div>
-        <div className="board-row">
-          {squares.slice(6,9)}
-        </div>
+        {rows}
       </div>
     )
   }
