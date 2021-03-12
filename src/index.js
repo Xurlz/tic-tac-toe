@@ -6,6 +6,8 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+        // Considerar usar outro valor como key
+        key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -13,22 +15,21 @@ class Board extends React.Component {
   }
 
   render() {
+    let squares = Array();
+    for (let i = 0; i < 9; i++ ) {
+      squares.push(this.renderSquare(i));
+    }
+    
     return (
       <div>
         <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          {squares.slice(0,3)}
         </div>
         <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
+          {squares.slice(3,6)}
         </div>
         <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+          {squares.slice(6,9)}
         </div>
       </div>
     )
