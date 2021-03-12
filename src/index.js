@@ -158,9 +158,6 @@ class Game extends React.Component {
           <ol>{flipMoveList?moves.reverse():moves}</ol>
           <button onClick={() => this.sort()}>Sort</button>
         </div>
-        <div>
-
-        </div>
       </div>
     );
   }
